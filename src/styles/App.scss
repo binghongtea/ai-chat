@@ -1,0 +1,209 @@
+// 变量
+$color-primary: #0070f3;
+$color-bg: #f4f5f7;
+$color-border: #e5e7eb;
+$color-text: #111;
+$radius: 18px;
+$avatar-size: 32px;
+
+// 全局容器
+.ai-chat-app {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-bg;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+// 顶部导航
+.ai-chat-header {
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid $color-border;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .ai-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: $color-primary;
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-chat-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+}
+
+// 聊天内容区
+.ai-chat-body {
+  flex: 1;
+  padding: 20px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .ai-empty-tip {
+    text-align: center;
+    margin-top: 60px;
+    color: #999;
+    font-size: 14px;
+  }
+
+  // 消息
+  .ai-message {
+    max-width: 75%;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+
+    &.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    &.assistant {
+      align-self: flex-start;
+    }
+
+    .ai-message-avatar {
+      width: $avatar-size;
+      height: $avatar-size;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+
+      .ai-message.user & {
+        background: $color-primary;
+        color: #fff;
+      }
+
+      .ai-message.assistant & {
+        background: #e5e7eb;
+        color: #333;
+      }
+    }
+
+    .ai-message-bubble {
+      padding: 10px 14px;
+      border-radius: $radius;
+      font-size: 15px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+      .ai-message.user & {
+        background: $color-primary;
+        color: #fff;
+      }
+
+      .ai-message.assistant & {
+        background: #fff;
+        color: $color-text;
+      }
+    }
+  }
+}
+
+// 底部输入区
+.ai-chat-footer {
+  padding: 12px 16px 16px;
+  background: #fff;
+  border-top: 1px solid $color-border;
+
+  .ai-input-bar {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+
+    .ai-input {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 20px;
+      border: 1px solid #dcdfe6;
+      outline: none;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      font-size: 15px;
+      line-height: 1.4;
+      font-family: inherit;
+    }
+
+    .ai-send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: $color-primary;
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .ai-tip {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #999;
+  }
+}
+
+// 上传栏
+.upload-bar {
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.doc-tip {
+  font-size: 14px;
+  color: #0070f3;
+}
+
+.clear-btn {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #f5f5f5;
+  cursor: pointer;
+}
