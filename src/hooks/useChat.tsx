@@ -9,11 +9,18 @@ export interface Message {
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
-  const { retrieve, loadDocument, ready, loading: vecLoading, clearStore } = useVectorStore()
+  const [model, setModel] = useState('qwen:0.5b')
+  const [dark, setDark] = useState(false)
 
-  // 上传文档并构建向量库
-  async function uploadDoc(text: string) {
-    await loadDocument(text)
+  const { docs, retrieve, addDocument, ready, loading: vecLoading, clearStore } = useVectorStore()
+
+  async function uploadDoc(filename: string, text: string) {
+    try {
+      return await addDocument(filename, text)
+    } catch (err) {
+      console.error(err)
+      throw new Error('文档处理失败')
+    }
   }
 
   const sendMessage = async (inputText: string) => {
@@ -26,37 +33,29 @@ export function useChat() {
     setMessages(prev => [...prev, { role: 'assistant', content: '' }])
 
     try {
-      // 1. 从向量库拿到最相关的片段
       const relevantText = await retrieve(inputText)
-
-      // 2. 构造带参考内容的 prompt
-      let finalUserMessage = userMessage
+      let finalMsg = userMessage
 
       if (relevantText) {
         const prompt = `
-请只根据下面内容回答，不要编造。
+仅依据以下内容回答，不要编造。
 参考内容：
 ${relevantText}
 
-用户问题：${inputText}
+问题：${inputText}
         `.trim()
-        finalUserMessage = { role: 'user', content: prompt }
+        finalMsg = { role: 'user', content: prompt }
       }
 
-      // 3. 历史对话 + 当前问题
       const messagesForModel = [
         ...newMessages.slice(0, -1),
-        finalUserMessage
+        finalMsg
       ]
 
-      const res = await fetch('http://localhost:11434/api/chat', {
+      const res = await fetch('http://localhost:1143/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'qwen:0.5b',
-          messages: messagesForModel,
-          stream: true,
-        }),
+        body: JSON.stringify({ model, messages: messagesForModel, stream: true }),
       })
 
       const reader = res.body?.getReader()
@@ -67,7 +66,6 @@ ${relevantText}
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-
         const chunk = decoder.decode(value)
         const lines = chunk.split('\n').filter(Boolean)
 
@@ -81,30 +79,49 @@ ${relevantText}
               next[next.length - 1].content = fullText
               return next
             })
-          } catch {
-            continue
-          }
+          } catch { }
         }
       }
     } catch (err) {
-      console.error('请求失败', err)
+      setMessages(prev => [
+        ...prev.slice(0, -1),
+        { role: 'assistant', content: '请求失败，请检查 Ollama 是否启动' }
+      ])
     } finally {
       setLoading(false)
     }
   }
 
-  const clearChat = () => {
-    setMessages([])
-    clearStore()
+  const clearChat = () => setMessages([])
+
+  // 导出聊天记录
+  const exportChat = () => {
+    const content = messages
+      .map(m => `[${m.role === 'user' ? '我' : 'AI'}]\n${m.content}\n`)
+      .join('\n')
+    const blob = new Blob([content], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `聊天记录_${new Date().getTime()}.md`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   return {
     messages,
     loading,
+    model,
+    setModel,
+    dark,
+    setDark,
+    docs,
     vectorLoading: vecLoading,
     vectorReady: ready,
     sendMessage,
     uploadDoc,
     clearChat,
+    clearStore,
+    exportChat,
   }
 }

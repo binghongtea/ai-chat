@@ -1,12 +1,20 @@
-// 变量
+// 浅色变量
 $color-primary: #0070f3;
 $color-bg: #f4f5f7;
+$color-panel: #fff;
 $color-border: #e5e7eb;
 $color-text: #111;
-$radius: 18px;
-$avatar-size: 32px;
+$color-text-secondary: #666;
 
-// 全局容器
+// 深色变量
+$dark-primary: #3b82f6;
+$dark-bg: #0f172a;
+$dark-panel: #1e293b;
+$dark-border: #334155;
+$dark-text: #f8fafc;
+$dark-text-secondary: #94a3b8;
+
+// 全局
 .ai-chat-app {
   width: 100%;
   height: 100vh;
@@ -15,38 +23,130 @@ $avatar-size: 32px;
   display: flex;
   flex-direction: column;
   background-color: $color-bg;
+  color: $color-text;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: background 0.2s, color 0.2s;
+}
+.ai-chat-app.dark {
+  background-color: $dark-bg;
+  color: $dark-text;
 }
 
-// 顶部导航
+// 头部
 .ai-chat-header {
   padding: 14px 20px;
-  background: #fff;
+  background: $color-panel;
   border-bottom: 1px solid $color-border;
   display: flex;
   align-items: center;
   gap: 10px;
-
-  .ai-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: $color-primary;
-    color: #fff;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .ai-chat-title {
-    margin: 0;
-    font-size: 17px;
-    font-weight: 600;
-  }
+  transition: background 0.2s, border-color 0.2s;
+}
+.ai-chat-app.dark .ai-chat-header {
+  background: $dark-panel;
+  border-color: $dark-border;
 }
 
-// 聊天内容区
+.ai-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: $color-primary;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-chat-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+// 按钮
+.clear-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid $color-border;
+  background: $color-panel;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ai-chat-app.dark .clear-btn {
+  background: $dark-panel;
+  border-color: $dark-border;
+  color: $dark-text;
+}
+
+// 上传栏
+.upload-bar {
+  padding: 12px 16px;
+  background: $color-panel;
+  border-bottom: 1px solid $color-border;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.2s, border-color 0.2s;
+}
+.ai-chat-app.dark .upload-bar {
+  background: $dark-panel;
+  border-color: $dark-border;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px dashed $color-border;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+.ai-chat-app.dark .upload-btn {
+  border-color: $dark-border;
+}
+
+.doc-tip {
+  font-size: 14px;
+  color: $color-primary;
+}
+.ai-chat-app.dark .doc-tip {
+  color: $dark-primary;
+}
+
+// 文档列表
+.doc-list {
+  padding: 8px 16px;
+  background: $color-panel;
+  font-size: 13px;
+  color: $color-text-secondary;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid $color-border;
+  transition: background 0.2s, border-color 0.2s;
+}
+.ai-chat-app.dark .doc-list {
+  background: $dark-panel;
+  border-color: $dark-border;
+  color: $dark-text-secondary;
+}
+
+.doc-tag {
+  background: #e6f0ff;
+  color: #0070f3;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.ai-chat-app.dark .doc-tag {
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+
+// 聊天区
 .ai-chat-body {
   flex: 1;
   padding: 20px 16px;
@@ -54,156 +154,246 @@ $avatar-size: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
 
-  .ai-empty-tip {
-    text-align: center;
-    margin-top: 60px;
-    color: #999;
-    font-size: 14px;
+.ai-empty-tip {
+  text-align: center;
+  margin-top: 60px;
+  color: #999;
+  font-size: 14px;
+}
+.ai-chat-app.dark .ai-empty-tip {
+  color: $dark-text-secondary;
+}
+
+.ai-message {
+  max-width: 75%;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+
+  &.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
   }
-
-  // 消息
-  .ai-message {
-    max-width: 75%;
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-
-    &.user {
-      align-self: flex-end;
-      flex-direction: row-reverse;
-    }
-
-    &.assistant {
-      align-self: flex-start;
-    }
-
-    .ai-message-avatar {
-      width: $avatar-size;
-      height: $avatar-size;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 500;
-
-      .ai-message.user & {
-        background: $color-primary;
-        color: #fff;
-      }
-
-      .ai-message.assistant & {
-        background: #e5e7eb;
-        color: #333;
-      }
-    }
-
-    .ai-message-bubble {
-      padding: 10px 14px;
-      border-radius: $radius;
-      font-size: 15px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-
-      .ai-message.user & {
-        background: $color-primary;
-        color: #fff;
-      }
-
-      .ai-message.assistant & {
-        background: #fff;
-        color: $color-text;
-      }
-    }
+  &.assistant {
+    align-self: flex-start;
   }
 }
 
-// 底部输入区
-.ai-chat-footer {
-  padding: 12px 16px 16px;
-  background: #fff;
-  border-top: 1px solid $color-border;
-
-  .ai-input-bar {
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-
-    .ai-input {
-      flex: 1;
-      padding: 12px 14px;
-      border-radius: 20px;
-      border: 1px solid #dcdfe6;
-      outline: none;
-      resize: none;
-      min-height: 44px;
-      max-height: 120px;
-      font-size: 15px;
-      line-height: 1.4;
-      font-family: inherit;
-    }
-
-    .ai-send-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: $color-primary;
-      color: #fff;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      cursor: pointer;
-
-      &:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-      }
-    }
-  }
-
-  .ai-tip {
-    text-align: center;
-    margin-top: 8px;
-    font-size: 12px;
-    color: #999;
-  }
-}
-
-// 上传栏
-.upload-bar {
-  padding: 12px 16px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
+.ai-message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+
+  .ai-message.user & {
+    background: $color-primary;
+    color: #fff;
+  }
+  .ai-message.assistant & {
+    background: #e5e7eb;
+    color: #333;
+  }
+}
+.ai-chat-app.dark .ai-message-avatar.assistant {
+  background: $dark-border;
+  color: $dark-text;
 }
 
-.upload-btn {
-  display: inline-block;
-  padding: 8px 14px;
-  border: 1px dashed #ccc;
-  border-radius: 10px;
+.ai-message-bubble {
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background 0.2s, color 0.2s;
+
+  .ai-message.user & {
+    background: $color-primary;
+    color: #fff;
+  }
+  .ai-message.assistant & {
+    background: $color-panel;
+    color: $color-text;
+  }
+}
+.ai-chat-app.dark .ai-message-bubble.assistant {
+  background: $dark-panel;
+  color: $dark-text;
+}
+
+// 底部
+.ai-chat-footer {
+  padding: 12px 16px 16px;
+  background: $color-panel;
+  border-top: 1px solid $color-border;
+  transition: background 0.2s, border-color 0.2s;
+}
+.ai-chat-app.dark .ai-chat-footer {
+  background: $dark-panel;
+  border-color: $dark-border;
+}
+
+.ai-input-bar {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.ai-input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 20px;
+  border: 1px solid $color-border;
+  outline: none;
+  resize: none;
+  min-height: 44px;
+  max-height: 120px;
+  font-size: 15px;
+  line-height: 1.4;
+  font-family: inherit;
+  background: $color-panel;
+  color: $color-text;
+  transition: all 0.2s;
+}
+.ai-chat-app.dark .ai-input {
+  background: $dark-panel;
+  border-color: $dark-border;
+  color: $dark-text;
+}
+
+.ai-send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: $color-primary;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 14px;
+  transition: background 0.2s;
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+}
+.ai-chat-app.dark .ai-send-btn {
+  background: $dark-primary;
+}
+.ai-chat-app.dark .ai-send-btn:disabled {
+  background: $dark-border;
 }
 
-.doc-tip {
-  font-size: 14px;
-  color: #0070f3;
+.ai-tip {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+}
+.ai-chat-app.dark .ai-tip {
+  color: $dark-text-secondary;
 }
 
-.clear-btn {
+// 控制台面板
+.control-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
   margin-left: auto;
+}
+
+.model-select {
   padding: 6px 10px;
   border-radius: 8px;
-  border: none;
-  background: #f5f5f5;
+  border: 1px solid $color-border;
+  background: $color-panel;
   cursor: pointer;
+  outline: none;
+}
+.ai-chat-app.dark .model-select {
+  background: $dark-panel;
+  border-color: $dark-border;
+  color: $dark-text;
+}
+
+.theme-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid $color-border;
+  background: $color-panel;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ai-chat-app.dark .theme-toggle {
+  background: $dark-panel;
+  border-color: $dark-border;
+  color: $dark-text;
+}
+
+/* 复制按钮 */
+.copy-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  margin-top: 4px;
+  align-self: flex-end;
+}
+.ai-chat-app.dark .copy-btn {
+  color: #aaa;
+}
+
+/* 加载动画 */
+.loading-wave {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  height: 16px;
+}
+.loading-wave span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #888;
+  animation: wave 1s infinite ease-in-out;
+}
+.loading-wave span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loading-wave span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes wave {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* 导出按钮 */
+.export-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+.ai-chat-app.dark .export-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #fff;
 }
